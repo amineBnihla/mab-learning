@@ -6,7 +6,9 @@
     "dev": "sanity dev",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "typegen": "sanity schema extract --path schema.json --enforce-required-fields && sanity typegen generate"
+    "typegen": "sanity schema extract --path schema.json --enforce-required-fields && sanity typegen generate",
+    "seed:validate": "node scripts/seed/validate-source.mjs",
+    "seed:import": "set -a && . ./.env.local && set +a && sanity datasets import ../course-kit/seed.ndjson --dataset \"$SANITY_STUDIO_DATASET\" --replace"
   },
   "dependencies": {
     "@sanity/icons": "^4.0.0",
