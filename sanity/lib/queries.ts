@@ -69,7 +69,7 @@ export const COURSE_BY_SLUG_QUERY = defineQuery(/* groq */ `
       name,
       "slug": slug.current,
       expertise,
-      bio,
+      "bioText": pt::text(bio),
       photo {
         asset->{_id, url, metadata {lqip, dimensions {width, height, aspectRatio}}},
         alt,

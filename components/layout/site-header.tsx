@@ -3,9 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { BellIcon, ChatIcon } from "@/components/ui/icons";
 
-const navigation = ["Home", "Learn", "Practice", "Connect"] as const;
+const navigation = [
+  { label: "Home", href: "/" },
+  { label: "Learn", href: "/#catalog-results" },
+  { label: "Practice" },
+  { label: "Connect" },
+] as const;
 
-export function SiteHeader() {
+type SiteHeaderProps = {
+  activeItem?: (typeof navigation)[number]["label"];
+};
+
+export function SiteHeader({ activeItem = "Learn" }: SiteHeaderProps) {
   return (
     <header className="glass-surface fixed inset-x-0 top-0 z-50 h-16 border-b border-outline-variant/30">
       <div className="vertex-container flex h-full items-center justify-between gap-4">
@@ -23,36 +32,31 @@ export function SiteHeader() {
 
           <nav aria-label="Primary navigation" className="hidden items-center gap-6 md:flex">
             {navigation.map((item) => {
-              const isActive = item === "Learn";
+              const isActive = item.label === activeItem;
 
-              if (item === "Home") {
+              if ("href" in item) {
                 return (
                   <Link
-                    key={item}
-                    className="border-b-2 border-transparent pb-1 text-label-md text-on-surface-variant transition-colors hover:text-primary"
-                    href="/"
+                    key={item.label}
+                    aria-current={isActive ? "page" : undefined}
+                    className={`border-b-2 pb-1 text-label-md transition-colors hover:text-primary ${
+                      isActive
+                        ? "border-primary text-primary"
+                        : "border-transparent text-on-surface-variant hover:border-primary/50"
+                    }`}
+                    href={item.href}
                   >
-                    {item}
+                    {item.label}
                   </Link>
                 );
               }
 
-              if (isActive) {
-                return (
-                  <a
-                    key={item}
-                    aria-current="page"
-                    className="border-b-2 border-primary pb-1 text-label-md text-primary"
-                    href="#catalog-results"
-                  >
-                    {item}
-                  </a>
-                );
-              }
-
               return (
-                <span key={item} className="border-b-2 border-transparent pb-1 text-label-md text-on-surface-variant">
-                  {item}
+                <span
+                  key={item.label}
+                  className="border-b-2 border-transparent pb-1 text-label-md text-on-surface-variant"
+                >
+                  {item.label}
                 </span>
               );
             })}
